@@ -7,7 +7,7 @@ import star from './star.svg';
 
 import { Route, Link } from 'react-router-dom';
 // In the Renderer process
-// const { ipcRenderer } = require('electron');
+const { ipcRenderer } = require('electron');
 
 export function App() {
   // ipcRenderer.invoke('get-app-version');

@@ -62,11 +62,14 @@ export default class App {
 
         // Create the browser window.
         App.mainWindow = new BrowserWindow({ width: width, height: height, show: false, webPreferences: {
-                contextIsolation: true,
+                // Not safe, but enables require()
+                contextIsolation: false,
+                nodeIntegration: true,
                 backgroundThrottling: false,
                 preload: join(__dirname, 'preload.js')
             }
         });
+
         App.mainWindow.setMenu(null);
         App.mainWindow.center();
 
