@@ -18,6 +18,12 @@ export function App() {
    */
   return (
     <div className="app">
+      <button onClick={
+        // @ts-ignore We'll need to add electron to the window type in the future
+        () => window.electron.log("The button has been clicked!")
+      }>
+        Click Me!
+      </button>
       <header className="flex">
         <Logo width="75" height="75" />
         <h1>Welcome to renderer!</h1>

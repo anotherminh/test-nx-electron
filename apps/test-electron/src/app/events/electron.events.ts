@@ -19,6 +19,10 @@ ipcMain.handle('get-app-version', (event) => {
     return environment.version;
 });
 
+ipcMain.handle('log', (event, ...args) => {
+    console.log('[Renderer Message]', ...args);
+})
+
 // Handle App termination
 ipcMain.on('quit', (event, code) => {
     app.exit(code);
