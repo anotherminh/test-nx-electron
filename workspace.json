@@ -1,7 +1,191 @@
 {
   "version": 1,
-  "projects": {},
+  "projects": {
+    "test-electron": {
+      "root": "apps/test-electron",
+      "sourceRoot": "apps/test-electron/src",
+      "projectType": "application",
+      "prefix": "test-electron",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "nx-electron:build",
+          "options": {
+            "outputPath": "dist/apps/test-electron",
+            "main": "apps/test-electron/src/main.ts",
+            "tsConfig": "apps/test-electron/tsconfig.app.json",
+            "assets": ["apps/test-electron/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/test-electron/src/environments/environment.ts",
+                  "with": "apps/test-electron/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "nx-electron:execute",
+          "options": {
+            "buildTarget": "test-electron:build"
+          }
+        },
+        "package": {
+          "builder": "nx-electron:package",
+          "options": {
+            "name": "test-electron",
+            "frontendProject": "test",
+            "outputPath": "dist/packages",
+            "prepackageOnly": true
+          }
+        },
+        "make": {
+          "builder": "nx-electron:make",
+          "options": {
+            "name": "test-electron",
+            "frontendProject": "test",
+            "outputPath": "dist/executables"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/test-electron/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/test-electron/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "renderer": {
+      "root": "apps/renderer",
+      "sourceRoot": "apps/renderer/src",
+      "projectType": "application",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/web:build",
+          "options": {
+            "outputPath": "dist/apps/renderer",
+            "index": "apps/renderer/src/index.html",
+            "main": "apps/renderer/src/main.tsx",
+            "polyfills": "apps/renderer/src/polyfills.ts",
+            "tsConfig": "apps/renderer/tsconfig.app.json",
+            "assets": [
+              "apps/renderer/src/favicon.ico",
+              "apps/renderer/src/assets"
+            ],
+            "styles": ["apps/renderer/src/styles.css"],
+            "scripts": [],
+            "webpackConfig": "apps/renderer/webpack.config.js"
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/renderer/src/environments/environment.ts",
+                  "with": "apps/renderer/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/web:dev-server",
+          "options": {
+            "buildTarget": "renderer:build"
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "renderer:build:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/renderer/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/renderer/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "renderer-e2e": {
+      "root": "apps/renderer-e2e",
+      "sourceRoot": "apps/renderer-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/renderer-e2e/cypress.json",
+            "tsConfig": "apps/renderer-e2e/tsconfig.e2e.json",
+            "devServerTarget": "renderer:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "renderer:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/renderer-e2e/**/*.{js,ts}"]
+          }
+        }
+      }
+    }
+  },
   "cli": {
-    "defaultCollection": "@nrwl/workspace"
+    "defaultCollection": "nx-electron"
+  },
+  "defaultProject": "test-electron",
+  "schematics": {
+    "@nrwl/react": {
+      "application": {
+        "style": "css",
+        "linter": "eslint",
+        "babel": true
+      },
+      "component": {
+        "style": "css"
+      },
+      "library": {
+        "style": "css",
+        "linter": "eslint"
+      }
+    }
   }
 }

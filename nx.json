@@ -22,5 +22,16 @@
       }
     }
   },
-  "projects": {}
+  "projects": {
+    "test-electron": {
+      "tags": []
+    },
+    "renderer": {
+      "tags": []
+    },
+    "renderer-e2e": {
+      "tags": [],
+      "implicitDependencies": ["renderer"]
+    }
+  }
 }
